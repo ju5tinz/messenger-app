@@ -33,7 +33,7 @@ const useStyle = makeStyles((theme) => ({
   bannerText: {
     color: "white",
     textAlign: "center",
-    fontSize: "1.5em"
+    fontSize: "2rem"
   }
 }));
 
