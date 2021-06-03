@@ -2,6 +2,13 @@ const router = require("express").Router();
 const { User } = require("../../db/models");
 const jwt = require("jsonwebtoken");
 
+const cookieOptions = {
+  httpOnly: true,
+  //expires 1 day from now
+  expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+  sameSite: 'strict'
+};
+
 router.post("/register", async (req, res, next) => {
   try {
     // expects {username, email, password} in req.body
@@ -28,12 +35,7 @@ router.post("/register", async (req, res, next) => {
     );
 
     res.status(200)
-      .cookie('messenger-token', token, {
-        httpOnly: true,
-        //expires 1 day from now
-        expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-        sameSite: 'strict'
-      })
+      .cookie('messenger-token', token, cookieOptions)
       .send({
         ...user.dataValues,
       });
@@ -73,12 +75,7 @@ router.post("/login", async (req, res, next) => {
       );
 
       res.status(200)
-        .cookie('messenger-token', token, {
-          httpOnly: true,
-          //expires 1 day from now
-          expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-          sameSite: 'strict'
-        })
+        .cookie('messenger-token', token, cookieOptions)
         .send({
           ...user.dataValues,
         });
