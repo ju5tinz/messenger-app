@@ -2,6 +2,13 @@ const router = require("express").Router();
 const { User } = require("../../db/models");
 const jwt = require("jsonwebtoken");
 
+const cookieOptions = {
+  httpOnly: true,
+  //expires 1 day from now
+  expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+  sameSite: 'strict'
+};
+
 router.post("/register", async (req, res, next) => {
   try {
     // expects {username, email, password} in req.body
@@ -26,10 +33,12 @@ router.post("/register", async (req, res, next) => {
       process.env.SESSION_SECRET,
       { expiresIn: 86400 }
     );
-    res.json({
-      ...user.dataValues,
-      token,
-    });
+
+    res.status(200)
+      .cookie('messenger-token', token, cookieOptions)
+      .send({
+        ...user.dataValues,
+      });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       return res.status(401).json({ error: "User already exists" });
@@ -64,10 +73,12 @@ router.post("/login", async (req, res, next) => {
         process.env.SESSION_SECRET,
         { expiresIn: 86400 }
       );
-      res.json({
-        ...user.dataValues,
-        token,
-      });
+
+      res.status(200)
+        .cookie('messenger-token', token, cookieOptions)
+        .send({
+          ...user.dataValues,
+        });
     }
   } catch (error) {
     next(error);
@@ -75,6 +86,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.delete("/logout", (req, res, next) => {
+  res.clearCookie('messenger-token')
   res.sendStatus(204);
 });
 
