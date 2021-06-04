@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { register } from "./store/utils/thunkCreators";
 
 import Banner from "./components/misc/Banner"
+import Header from "./components/misc/AuthHeader"
 
 const useStyle = makeStyles((theme) => ({
   registerPage: {
@@ -25,18 +26,6 @@ const useStyle = makeStyles((theme) => ({
       flexDirection: "column-reverse",
       justifyContent: "flex-end"
     }
-  },
-  registerContentTop: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    padding: theme.spacing(3),
-    [theme.breakpoints.down("xs")]: {
-      justifyContent: "center"
-    }
-  },
-  registerContentTopText: {
-    color: theme.palette.secondary.main,
-    fontSize: "1rem"
   },
   registerContentMain: {
     margin: `${theme.spacing(10)}px ${theme.spacing(16)}px`,
@@ -63,18 +52,6 @@ const useStyle = makeStyles((theme) => ({
       margin: theme.spacing(3)
     }
   },
-  secondaryButton: {
-    padding: `${theme.spacing(2)}px ${theme.spacing(7)}px`,
-    margin: `${theme.spacing(1)}px ${theme.spacing(3)}px`,
-    color: theme.palette.primary.main,
-    backgroundColor: "white",
-    "&:hover": {
-      backgroundColor: theme.palette.grey[100]
-    },
-    [theme.breakpoints.down("sm")]: {
-      margin: theme.spacing(1)
-    }
-  }
 }));
 
 const Login = (props) => {
@@ -106,10 +83,7 @@ const Login = (props) => {
     <Grid className={classes.registerPage} container >
       <Banner />
       <Grid className={classes.registerContentContainer} container item xs={12} sm={7}>
-        <Grid className={classes.registerContentTop} container item>
-          <Typography className={classes.registerContentTopText}>Already have an account?</Typography>
-          <Button className={classes.secondaryButton} variant="contained" size="large" onClick={() => history.push("/login")}>Login</Button>
-        </Grid>
+        <Header text="Already have an account?" buttonText="Login" onClick={() => history.push("/login")} />
         <Box className={classes.registerContentMain}>
           <Typography className={classes.registerContentTitle}>Create an account.</Typography>
           <form className={classes.registerForm} onSubmit={handleRegister}>

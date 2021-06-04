@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { login } from "./store/utils/thunkCreators";
 
 import Banner from "./components/misc/Banner"
+import Header from "./components/misc/AuthHeader"
 
 const useStyle = makeStyles((theme) => ({
   loginPage: {
@@ -24,18 +25,6 @@ const useStyle = makeStyles((theme) => ({
       flexDirection: "column-reverse",
       justifyContent: "flex-end"
     }
-  },
-  loginContentTop: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    padding: theme.spacing(3),
-    [theme.breakpoints.down("xs")]: {
-      justifyContent: "center"
-    }
-  },
-  loginContentTopText: {
-    color: theme.palette.secondary.main,
-    fontSize: "1rem"
   },
   loginContentMain: {
     margin: theme.spacing(16),
@@ -62,18 +51,6 @@ const useStyle = makeStyles((theme) => ({
       margin: theme.spacing(3)
     }
   },
-  secondaryButton: {
-    padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
-    margin: `${theme.spacing(1)}px ${theme.spacing(3)}px`,
-    color: theme.palette.primary.main,
-    backgroundColor: "white",
-    "&:hover": {
-      backgroundColor: theme.palette.grey[100]
-    },
-    [theme.breakpoints.down("sm")]: {
-      margin: theme.spacing(1)
-    }
-  }
 }));
 
 const Login = (props) => {
@@ -97,10 +74,7 @@ const Login = (props) => {
     <Grid container className={classes.loginPage}>
       <Banner />
       <Grid className={classes.loginContentContainer} container item xs={12} sm={7}>
-        <Grid className={classes.loginContentTop} container item>
-          <Typography className={classes.loginContentTopText}>Don't have an account?</Typography>
-          <Button className={classes.secondaryButton} variant="contained" size="large" onClick={() => history.push("/register")}>Create account</Button>
-        </Grid>
+        <Header text="Don't have an account?" buttonText="Create account" onClick={() => history.push("/register")}/>
         <Box className={classes.loginContentMain}>
           <Typography className={classes.loginContentTitle}>Welcome back!</Typography>
           <form className={classes.loginForm} onSubmit={handleLogin}>
