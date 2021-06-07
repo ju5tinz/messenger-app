@@ -9,9 +9,52 @@ import {
   FormControl,
   TextField,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { login } from "./store/utils/thunkCreators";
 
+import Banner from "./components/misc/Banner"
+import Header from "./components/misc/AuthHeader"
+
+const useStyle = makeStyles((theme) => ({
+  loginPage: {
+    height: "100vh",
+  },
+  loginContentContainer: {
+    flexDirection: "column",
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column-reverse",
+      justifyContent: "flex-end"
+    }
+  },
+  loginContentMain: {
+    margin: theme.spacing(16),
+    [theme.breakpoints.down("sm")]: {
+      margin: theme.spacing(4)
+    },
+  },
+  loginContentTitle: {
+    fontSize: "2rem",
+    fontWeight: "600",
+  },
+  loginForm: {
+    textAlign: "center"
+  },
+  primaryButton: {
+    padding: `${theme.spacing(2)}px ${theme.spacing(7)}px`,
+    margin: theme.spacing(7),
+    color: "white",
+    backgroundColor: theme.palette.primary.main,
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark
+    },
+    [theme.breakpoints.down("sm")]: {
+      margin: theme.spacing(3)
+    }
+  },
+}));
+
 const Login = (props) => {
+  const classes = useStyle();
   const history = useHistory();
   const { user, login } = props;
 
@@ -28,40 +71,41 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
-          <Button onClick={() => history.push("/register")}>Register</Button>
-        </Grid>
-        <form onSubmit={handleLogin}>
-          <Grid>
+    <Grid container className={classes.loginPage}>
+      <Banner />
+      <Grid className={classes.loginContentContainer} container item xs={12} sm={7}>
+        <Header text="Don't have an account?" buttonText="Create account" onClick={() => history.push("/register")}/>
+        <Box className={classes.loginContentMain}>
+          <Typography className={classes.loginContentTitle}>Welcome back!</Typography>
+          <form className={classes.loginForm} onSubmit={handleLogin}>
             <Grid>
-              <FormControl margin="normal" required>
+              <Grid>
+                <FormControl margin="normal" fullWidth required>
+                  <TextField
+                    aria-label="username"
+                    label="Username"
+                    name="username"
+                    type="text"
+                  />
+                </FormControl>
+              </Grid>
+              <FormControl margin="normal" fullWidth required>
                 <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
+                  label="Password"
+                  aria-label="password"
+                  type="password"
+                  name="password"
                 />
               </FormControl>
+              <Grid>
+                <Button className={classes.primaryButton} type="submit" variant="contained" size="large">
+                  Login
+                </Button>
+              </Grid>
             </Grid>
-            <FormControl margin="normal" required>
-              <TextField
-                label="password"
-                aria-label="password"
-                type="password"
-                name="password"
-              />
-            </FormControl>
-            <Grid>
-              <Button type="submit" variant="contained" size="large">
-                Login
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Box>
+          </form>
+        </Box>
+      </Grid>
     </Grid>
   );
 };
