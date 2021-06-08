@@ -21,7 +21,7 @@ module.exports = (server) => {
 
   io.on("connection", (socket) => {
     socket.on("go-online", (id) => {
-      if (!onlineUsers.hasOwnProperty(id)) {
+      if (!onlineUsers.hasOwnProperty(id) || onlineUsers[id] !== socket.id) {
         onlineUsers[id] = socket.id;
       }
       // send the user who just went online to everyone else who is already online
