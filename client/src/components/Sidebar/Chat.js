@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Box } from "@material-ui/core";
+import { Box, Badge } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
@@ -17,6 +17,10 @@ const styles = {
       cursor: "grab",
     },
   },
+
+  unreadBadge: {
+    right: "2em",
+  }
 };
 
 class Chat extends Component {
@@ -39,6 +43,7 @@ class Chat extends Component {
           sidebar={true}
         />
         <ChatContent conversation={this.props.conversation} />
+        <Badge className={classes.unreadBadge} badgeContent={this.props.conversation.numUnread} color="primary"/>
       </Box>
     );
   }
