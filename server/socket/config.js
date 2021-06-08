@@ -1,4 +1,6 @@
 const { Server } = require("socket.io");
+const cookie = require("cookie");
+const jwt = require("jsonwebtoken");
 const onlineUsers = require("../onlineUsers");
 
 module.exports = (server) => {
@@ -6,9 +8,16 @@ module.exports = (server) => {
 
   // socket.io middleware to check if user is authenticated
   io.use((socket, next) => { 
-    console.log(socket.handshake.headers.cookie);
-    next();
-  })
+    const token = cookie.parse(socket.handshake.headers.cookie)["messenger-token"];
+    
+    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+      if(err) {
+        return next(new Error("Invalid token"));
+      } else {
+        next();
+      }
+    });
+  });
 
   io.on("connection", (socket) => {
     socket.on("go-online", (id) => {
