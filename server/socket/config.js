@@ -29,10 +29,14 @@ module.exports = (server) => {
     });
 
     socket.on("new-message", (data) => {
-      socket.broadcast.emit("new-message", {
-        message: data.message,
-        sender: data.sender,
-      });
+      if(onlineUsers.hasOwnProperty(data.recipientId)) {
+        socket
+          .to(onlineUsers[data.recipientId])
+          .emit("new-message", {
+            message: data.message,
+            sender: data.sender,
+          });
+      }
     });
 
     socket.on("logout", (id) => {
