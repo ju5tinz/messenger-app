@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  readMessages,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -110,8 +111,9 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
 
 export const updateUnread = (conversationId) => async (dispatch) => {
   try {
-    await axios.patch(`/api/conversations/${conversationId}/read`)
+    await axios.patch(`/api/conversations/${conversationId}/read`);
+    dispatch(readMessages(conversationId));
   } catch (error) {
-
+    console.error(error);
   }
 }
