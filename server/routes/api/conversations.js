@@ -107,7 +107,7 @@ router.patch("/:conversationId/read", async (req, res, next) => {
       }}
     );
 
-    res.status(200);
+    res.sendStatus(200);
   } catch (error) {
     next(error);
   }
