@@ -90,4 +90,27 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.patch("/:conversationId/read", async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+
+    const conversationId = req.params.conversationId;
+    const userId = req.user.id;
+    
+    await Message.update(
+      {isUnread: false},
+      {where: {
+        conversationId: conversationId,
+        [Op.not]: [{senderId: userId}]
+      }}
+    );
+
+    res.status(200);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

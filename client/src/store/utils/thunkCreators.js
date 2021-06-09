@@ -107,3 +107,11 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
     console.error(error);
   }
 };
+
+export const updateUnread = (conversationId) => async (dispatch) => {
+  try {
+    await axios.patch(`/api/conversations/${conversationId}/read`)
+  } catch (error) {
+
+  }
+}
