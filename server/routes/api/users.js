@@ -36,4 +36,28 @@ router.get("/:username", async (req, res, next) => {
   }
 });
 
+router.post("/current/photo", async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+
+    const { photoUrl } = req.body;
+
+    // TODO: add checks to verify that url is valid and 
+    // points to an image that is not too large.
+
+    await User.update(
+      {photoUrl},
+      {where: {
+        id: req.user.id
+      }}
+    );
+
+    res.json({photoUrl});
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

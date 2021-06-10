@@ -6,6 +6,7 @@ import {
   setNewMessage,
   setSearchedUsers,
 } from "../conversations";
+import { setPhotoUrl } from "../user";
 import { gotUser, setFetchingStatus } from "../user";
 
 // USER THUNK CREATORS
@@ -52,6 +53,15 @@ export const logout = (id) => async (dispatch) => {
     await axios.delete("/auth/logout");
     dispatch(gotUser({}));
     socket.emit("logout", id);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updatePhotoUrl = (photoUrl) => async (dispatch) => {
+  try {
+    const { data } = await axios.post("/api/users/current/photo", photoUrl);
+    dispatch(setPhotoUrl(data.photoUrl));
   } catch (error) {
     console.error(error);
   }
