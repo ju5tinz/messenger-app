@@ -2,6 +2,7 @@
 
 const GET_USER = "GET_USER";
 const SET_FETCHING_STATUS = "SET_FETCHING_STATUS";
+const SET_PHOTO_URL = "SET_PHOTO_URL";
 
 // ACTION CREATORS
 
@@ -17,6 +18,11 @@ export const setFetchingStatus = (isFetching) => ({
   isFetching
 });
 
+export const setPhotoUrl = (photoUrl) => ({
+  type: SET_PHOTO_URL,
+  photoUrl
+});
+
 // REDUCER
 
 const reducer = (state = { isFetching: true }, action) => {
@@ -28,6 +34,11 @@ const reducer = (state = { isFetching: true }, action) => {
         ...state,
         isFetching: action.isFetching
       };
+    case SET_PHOTO_URL:
+      return {
+        ...state,
+        photoUrl: action.photoUrl
+      }
     default:
       return state;
   }
