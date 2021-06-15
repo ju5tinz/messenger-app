@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  readMessages,
 } from "../conversations";
 import { setPhotoUrl } from "../user";
 import { gotUser, setFetchingStatus } from "../user";
@@ -121,3 +122,12 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
     console.error(error);
   }
 };
+
+export const updateUnread = (conversationId) => async (dispatch) => {
+  try {
+    await axios.patch(`/api/conversations/${conversationId}/read`);
+    dispatch(readMessages(conversationId));
+  } catch (error) {
+    console.error(error);
+  }
+}

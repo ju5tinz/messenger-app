@@ -71,12 +71,43 @@ router.get("/", async (req, res, next) => {
       // set properties for notification count and latest message preview
       convoJSON.latestMessageText = convoJSON.messages[convoJSON.messages.length - 1].text;
       convoJSON.latestMessageTime = convoJSON.messages[convoJSON.messages.length - 1].createdAt;
+      
+      const unreadMessages = 
+        convoJSON
+        .messages
+        .filter(message => (message.isUnread && message.senderId === convoJSON.otherUser.id));
+      
+      convoJSON.numUnread = unreadMessages.length;
+
       conversations[i] = convoJSON;
     }
 
     conversations.sort((a, b) => b.latestMessageTime - a.latestMessageTime);
 
     res.json(conversations);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/:conversationId/read", async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+
+    const conversationId = req.params.conversationId;
+    const userId = req.user.id;
+    
+    await Message.update(
+      {isUnread: false},
+      {where: {
+        conversationId: conversationId,
+        [Op.not]: [{senderId: userId}]
+      }}
+    );
+
+    res.sendStatus(200);
   } catch (error) {
     next(error);
   }
